@@ -151,16 +151,15 @@
             </div>
         `);
     }
-    showUpcomingDaysForecast({ dayImgUrl, weekDay, maxTemp,value,unit}) {
+    showUpcomingDaysForecast({ dayImgUrl, weekDay, maxTemp,unit}) {
         $('#forecast-details-week').append(`
             <li class="forecastBox__week-day d-flex flex-column justify-content-center align-items-center p-2 weather-day">
                 <img class="mb-2" width="30" src="${this.imageURL}/${dayImgUrl}.svg" />
                 <span class="mb-2">${weekDay}</span>
                 <span class="font-weight-bold">${maxTemp}&deg</span>
-                <span>${value} ${unit}</span>
+                <span> ${unit}</span>
             </li>
-        `);
-      // Value & Unit kan nå APi, inne i   showTodaysForecastDetails men inte i UpcommintDaysForecast, dokumentation: https://www.metaweather.com/api/ 
+        `)
     }
     showTodaysForecast(forecast) {
         $('#forecast-card-weekday').html(forecast.currentWeekday);
@@ -258,8 +257,7 @@
             const dayImgUrl = value.weather_state_abbr;
             const maxTemp = Math.round(value.max_temp);
             const weekDay = moment(value.applicable_date).format('dddd').substring(0, 3);
-
-            this.displayForecast.showUpcomingDaysForecast({ dayImgUrl, maxTemp, weekDay });
+            this.displayForecast.showUpcomingDaysForecast({ dayImgUrl, maxTemp, weekDay, unit });
         });
     }
 }
