@@ -46,7 +46,7 @@
             todaysImgUrl: data.weather_state_abbr,
             todaysTemp: Math.round(data.the_temp),
             weatherState: data.weather_state_name,
- 10)    Koden förbereder sedan data som kommer att användas för att visa dagens prognosdetaljer och morgondagens prognosdetalje genom att deklarera grupper som kan plockas ut med const; this. och data.Koden är avsedd att visa prognosen för idag och imorgon.
+ 10)    Koden förbereder sedan data som kommer att användas för att visa dagens prognosdetaljer och morgondagens prognosdetaljer genom att deklarera grupper som kan plockas ut med const; this. och data.Koden är avsedd att visa prognosen för idag och imorgon.
    
         prepareDataForDom(data) {
         const {  } = data.consolidated_weather[0]; organiserar alla möjliga data punkter man kan plocka från API
@@ -151,15 +151,15 @@
             </div>
         `);
     }
-    showUpcomingDaysForecast({ dayImgUrl, weekDay, maxTemp,unit}) {
+    showUpcomingDaysForecast({ dayImgUrl, weekDay, maxTemp, unit }) {
         $('#forecast-details-week').append(`
             <li class="forecastBox__week-day d-flex flex-column justify-content-center align-items-center p-2 weather-day">
                 <img class="mb-2" width="30" src="${this.imageURL}/${dayImgUrl}.svg" />
                 <span class="mb-2">${weekDay}</span>
                 <span class="font-weight-bold">${maxTemp}&deg</span>
-                <span> ${unit}</span>
+                <span>${unit}</span>
             </li>
-        `)
+        `);
     }
     showTodaysForecast(forecast) {
         $('#forecast-card-weekday').html(forecast.currentWeekday);
@@ -177,21 +177,20 @@
     }
     gatherTodaysForecastDetails(data) {
         return {
-            humidity: {
+            'Luft fuktighet': {
                 value: data.humidity,
                 unit: '%',
             },
-            wind: {
+            'Vind hastighet:': {
                 value: Math.round(data.wind_speed),
                 unit: 'km/h',
             },
-            'max temp': {
+            'Temperatur': {
                 value: Math.round(data.max_temp),
                 unit: '°C',
             },
         };
     }
-
     gatherTodaysForecastGeneral(data) {
         return {
             currentWeekday: moment(data.applicable_date).format('dddd'),
@@ -202,7 +201,6 @@
             weatherState: data.weather_state_name,
         };
     }
-
     prepareDataForDom(data) {
         const {
             predictability,
@@ -216,7 +214,6 @@
             weather_state_abbr,
             weather_state_name,
         } = data.consolidated_weather[0];
-
         const todaysForecastGeneral = this.gatherTodaysForecastGeneral({
             applicable_date,
             weather_state_abbr,
@@ -239,7 +236,6 @@
         this.coreDomElements.hideLoader();
         this.coreDomElements.showForecast();
     }
-
     prepareTodaysForecastDetails(forecast) {
         $.each(forecast, (key, value) => {
             this.displayForecast.showTodaysForecastDetails({
@@ -249,7 +245,6 @@
             });
         });
     }
-
     prepareUpcomingDaysForecast(forecast) {
         $.each(forecast, (index, value) => {
             if (index < 1) return;
@@ -257,6 +252,9 @@
             const dayImgUrl = value.weather_state_abbr;
             const maxTemp = Math.round(value.max_temp);
             const weekDay = moment(value.applicable_date).format('dddd').substring(0, 3);
+            const unit = value.weather_state_name ;
+            
+
             this.displayForecast.showUpcomingDaysForecast({ dayImgUrl, maxTemp, weekDay, unit });
         });
     }
@@ -268,7 +266,6 @@
         this.dataMiddleware = new dataMiddleware();
         this.registerEventListener();
     }
-
     showRequestInProgress() {
         this.coreDomElements.showLoader();
         this.coreDomElements.hideSearchBox();
@@ -281,13 +278,13 @@
     fetchWeather(query) {
         this.fetchForecastApi.getLocation(query, location => {
             if (!location || location.length === 0) {
-                this.coreDomElements.showError('Could not find this location, please try again.');
+                this.coreDomElements.showError('Position kan inte hittas; sök efter en huvudstad.');
                 return;
             }
 
             this.fetchForecastApi.getWeatherData(location[0].woeid, data => {
                 if (!data) {
-                    this.coreDomElements.showError('Could not proceed with the request, please try again later.');
+                    this.coreDomElements.showError('Sökning kan inte genomföras; försök igen.');
                     return;
                 }
 
@@ -312,3 +309,8 @@
     }
 }
    const request = new requestController();
+
+
+
+
+
